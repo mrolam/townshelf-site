@@ -44,8 +44,8 @@ hr.rule{border:0;border-top:1px solid var(--line);margin:0}
 .preview-banner{background:var(--cream);color:var(--ink);text-align:center;font-size:.78rem;padding:6px 12px;border-bottom:1px solid var(--line)}
 .topbar{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40}
 .topbar-in{display:flex;align-items:center;gap:22px;height:68px}
-.brand{display:flex;align-items:center;gap:6px;text-decoration:none;color:var(--ink);font:700 1.45rem/1 "DM Sans",sans-serif;letter-spacing:-.03em}
-.brand img{height:38px;width:auto;mix-blend-mode:multiply}
+.brand{display:flex;flex:none;align-items:center;gap:6px;text-decoration:none;color:var(--ink);font:700 1.45rem/1 "DM Sans",sans-serif;letter-spacing:-.03em}
+.brand img{display:block;height:44px;width:auto;max-width:none;flex:none;object-fit:contain;overflow:visible}
 .mainnav{display:flex;gap:2px}
 .mainnav a{color:var(--ink);text-decoration:none;font-weight:500;padding:8px 12px;border-radius:8px;font-size:.95rem}
 .mainnav a:hover,.mainnav a.active{color:var(--teal-d)}

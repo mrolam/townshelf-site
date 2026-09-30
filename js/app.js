@@ -178,7 +178,7 @@ TS.chrome = function(active){
   if(h) h.innerHTML =
    '<div class="preview-banner">Preview with sample stores and items · No real payments or signups</div>'+
    '<header class="topbar"><div class="wrap topbar-in">'+
-   '<a class="brand" href="index.html"><img src="assets/logo-icon.png" alt="" width="54" height="42"><span>townshelf</span></a>'+
+   '<a class="brand" href="index.html"><img src="assets/logo-icon.png?v=2" alt="" width="55" height="44"><span>townshelf</span></a>'+
    '<nav class="mainnav" id="mainnav">'+nav(active)+'</nav>'+
    '<form class="topsearch" action="browse.html"><input name="q" type="search" placeholder="Search shops & items" aria-label="Search"></form>'+
    '<a class="cartbtn" href="cart.html" aria-label="Cart"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M5 7h14l-1.5 11h-11z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 7a3 3 0 0 1 6 0" fill="none" stroke="currentColor" stroke-width="2"/></svg><span class="cart-count" style="display:none">0</span></a>'+
@@ -187,7 +187,7 @@ TS.chrome = function(active){
   var f=document.getElementById("site-footer");
   if(f) f.innerHTML =
    '<footer class="footer"><div class="wrap footer-grid">'+
-   '<div><a class="brand brand-foot" href="index.html"><img src="assets/logo-icon.png" alt="" width="54" height="42"><span>townshelf</span></a><p>Quality, vetted goods from real local shops in every corner of the country, shipped to your door. Every order keeps a local shop open.</p></div>'+
+   '<div><a class="brand brand-foot" href="index.html"><img src="assets/logo-icon.png?v=2" alt="" width="55" height="44"><span>townshelf</span></a><p>Quality, vetted goods from real local shops in every corner of the country, shipped to your door. Every order keeps a local shop open.</p></div>'+
    '<div><h4>Shop</h4><a href="browse.html">All items</a><a href="browse.html#towns">Shop by town</a><a href="store.html?id=mega-brown-box">Mega Brown Box</a></div>'+
    '<div><h4>Townshelf</h4><a href="about.html">How it works</a><a href="about.html#faq">FAQ</a><a href="list-your-shop.html">List your shop</a><a href="cart.html">Cart (preview)</a></div>'+
    '</div><div class="wrap footer-note">Preview prototype with sample stores and items. Apart from Mega Brown Box (La Habra, CA), shops, owners and quotes are fictional; Mega Brown Box items shown are generic examples. Prices are sample figures. No payments are processed.<br>Townshelf is not affiliated with American Express.</div></footer>'+
