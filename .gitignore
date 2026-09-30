@@ -1,0 +1,23 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Node (if tooling is added later)
+node_modules/
+
+# Build artifacts / archives
+*.zip
+dist/
+
+# Local env / secrets (none needed today)
+.env
+.env.*

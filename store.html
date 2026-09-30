@@ -1,0 +1,48 @@
+<!doctype html><html lang="en"><head><title>Shop · Townshelf (preview)</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="favicon.png" type="image/png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="css/style.css">
+<script src="data/data.js"></script><script src="js/art.js"></script><script src="js/app.js"></script>
+</head><body>
+<div id="site-header"></div>
+<main id="main"></main>
+<div id="site-footer"></div>
+<script>
+TS.chrome("");
+var st=TS.store(TS.param("id")||"mega-brown-box"), E=TS.esc, m=document.getElementById("main");
+if(!st){m.innerHTML='<div class="wrap" style="padding:60px 20px"><h1>Shop not found</h1><p><a href="browse.html#towns">See all shops</a></p></div>';}
+else{
+  document.title=st.name+" · "+st.town+", "+st.state+" · Townshelf (preview)";
+  var items=TS.itemsFor(st.slug);
+  var quote=st.quote?'<div class="store-quote"><blockquote>“'+E(st.quote)+'”</blockquote><div class="muted small">'+E(st.owner)+', '+E(st.ownerRole)+'</div></div>'
+    :'<div class="store-quote"><div><strong>Owner: '+E(st.owner)+'</strong></div><div class="muted small">Owner story and photos coming soon, written with the shop.</div></div>';
+  var hasEx=items.some(function(i){return i.example;});
+  m.innerHTML=
+  '<div class="store-head"><div class="wrap store-head-in">'+
+    TS.storeLogo(st,96)+
+    '<div><div class="loc">'+E(st.town)+', '+E(st.state)+' · '+E(st.category)+'</div><h1>'+E(st.name)+'</h1><p class="muted" style="font-size:1.1rem;margin:0 0 10px">'+E(st.tagline)+'</p>'+
+    '<div class="marks">'+(st.checked?TS.checkedMark():'')+(st.verified?TS.verifiedBadge():'')+(st.sample?'<span class="tag">Sample shop (fictional)</span>':'')+'</div></div>'+
+    TS.postmark(st.town,st.state)+
+  '</div></div>'+
+  '<div class="wrap store-cols">'+
+    '<div><div class="eyebrow">Our story</div><p style="font-size:1.1rem">'+E(st.story)+'</p>'+quote+
+      '<div class="store-photos"><div>Storefront photo<br>(placeholder)</div><div>Inside the shop<br>(placeholder)</div><div>Owner photo<br>(placeholder)</div></div></div>'+
+    '<div><div class="eyebrow">Shop details</div><ul class="facts">'+
+      '<li><span>Storefront</span><span>'+E(st.town)+', '+E(st.state)+'</span></li>'+
+      '<li><span>Type</span><span>'+E(st.category)+'</span></li>'+
+      '<li><span>Status</span><span>'+(st.verified?'Verified physical storefront':'Verification pending')+'</span></li>'+
+      '<li><span>Listings</span><span>'+(st.checked?'Townshelf Checked':'Pending review')+'</span></li>'+
+      '<li><span>Ships from</span><span>'+E(st.town)+', '+E(st.state)+'</span></li>'+
+      '<li><span>Ships within</span><span class="placeholder">[ship-by window TBD]</span></li>'+
+      '<li><span>Returns</span><span class="placeholder">[return policy TBD]</span></li>'+
+      '<li><span>Street address</span><span class="muted">Shown after verification (placeholder)</span></li>'+
+    '</ul><p class="muted small" style="margin-top:14px">Sold and shipped by '+E(st.name)+'. Townshelf is the marketplace in the background.</p></div>'+
+  '</div>'+
+  '<section style="padding-top:48px"><div class="wrap"><div class="sec-head"><div><div class="eyebrow">On the shelf</div><h2>Items from '+E(st.name)+'</h2>'+
+  (hasEx?'<p>Generic examples of the kinds of items this store might list, not its real inventory or prices.</p>':'')+
+  '</div><a class="link-arrow" href="browse.html?store='+encodeURIComponent(st.slug)+'">Filter in browse →</a></div>'+
+  (items.length?'<div class="grid g4">'+items.map(TS.itemCard).join("")+'</div>':'<div class="empty">No items listed yet.</div>')+
+  '</div></section>';
+}
+</script>
+</body></html>

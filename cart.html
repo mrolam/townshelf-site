@@ -1,0 +1,51 @@
+<!doctype html><html lang="en"><head><title>Cart (preview) · Townshelf</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="favicon.png" type="image/png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="css/style.css">
+<script src="data/data.js"></script><script src="js/art.js"></script><script src="js/app.js"></script>
+</head><body>
+<div id="site-header"></div>
+<main class="wrap">
+  <div class="preview-warning"><strong>Preview only, no payment.</strong> This is a mock checkout: nothing is charged, submitted or shipped.</div>
+  <h1 style="font-size:clamp(1.8rem,4vw,2.4rem);margin-top:20px">Your cart</h1>
+  <div class="cart-layout">
+    <div id="lines"></div>
+    <aside>
+      <div class="panel summary">
+        <h3>Order summary</h3>
+        <div class="row"><span>Items subtotal</span><strong id="sub">$0.00</strong></div>
+        <div class="row"><span>Shipping</span><span class="placeholder">[shipping TBD]</span></div>
+        <div class="row"><span>Tax</span><span class="placeholder">[tax TBD]</span></div>
+        <div class="row total"><span>Estimated total</span><span id="tot">$0.00 + TBD</span></div>
+        <p class="muted" style="font-size:.82rem">Each shop ships its part of your order separately, from its own town.</p>
+        <label class="fake-field"><span>Email</span><input disabled placeholder="Disabled in preview"></label>
+        <label class="fake-field"><span>Shipping address</span><input disabled placeholder="Disabled in preview"></label>
+        <label class="fake-field"><span>Payment</span><input disabled placeholder="No payment in preview"></label>
+        <button class="btn btn-primary" style="width:100%;margin-top:8px" id="place">Place order (preview)</button>
+        <div id="placed" class="thanks"><strong>Thanks for shopping local!</strong><p style="margin:0">This was a preview. No order was placed and no payment was taken.</p></div>
+      </div>
+    </aside>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script>
+TS.chrome("cart.html");
+var E=TS.esc;
+function render(){
+  var c=TS.cart(), groups={}, sub=0;
+  c.forEach(function(l){var it=TS.item(l.slug);if(!it)return;(groups[it.store]=groups[it.store]||[]).push({it:it,qty:l.qty});sub+=it.price*l.qty;});
+  var keys=Object.keys(groups);
+  document.getElementById("lines").innerHTML = keys.length ? keys.map(function(k){var st=TS.store(k);
+    return '<div class="cart-group"><div class="cart-group-head"><span>'+'<span style="display:inline-flex;vertical-align:middle;margin-right:8px">'+TS.storeLogo(st,30)+'</span>'+'Shipped by <a href="store.html?id='+k+'">'+E(st.name)+'</a></span><span class="muted" style="font-weight:600">from '+E(st.town)+', '+E(st.state)+'</span></div>'+
+    groups[k].map(function(g){return '<div class="cart-line"><div class="mini-img">'+TS.itemPhoto(g.it,0)+'</div><div><a href="item.html?id='+g.it.slug+'" style="color:inherit;font-weight:700">'+E(g.it.title)+'</a><div>'+TS.condBadge(g.it.condition)+'</div>'+
+      '<div class="qty"><button data-s="'+g.it.slug+'" data-d="-1" aria-label="Less">−</button><span>'+g.qty+'</span><button data-s="'+g.it.slug+'" data-d="1" aria-label="More">+</button></div></div><strong>'+TS.money(g.it.price*g.qty)+'</strong></div>';}).join("")+'</div>';}).join("")
+    : '<div class="empty"><h3>Your cart is empty</h3><p class="muted">Find something from a local shop.</p><a class="btn btn-primary" href="browse.html">Start shopping</a></div>';
+  document.getElementById("sub").textContent=TS.money(sub);
+  document.getElementById("tot").textContent=TS.money(sub)+" + TBD";
+  document.getElementById("place").disabled=!keys.length;
+  document.querySelectorAll(".qty button").forEach(function(b){b.onclick=function(){var l=TS.cart().find(function(x){return x.slug===b.dataset.s;});TS.cartSet(b.dataset.s,l.qty+(+b.dataset.d));render();};});
+}
+document.getElementById("place").onclick=function(){document.getElementById("placed").classList.add("show");TS.cartClear();render();};
+render();
+</script>
+</body></html>

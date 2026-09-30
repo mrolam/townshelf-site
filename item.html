@@ -1,0 +1,64 @@
+<!doctype html><html lang="en"><head><title>Item · Townshelf (preview)</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="favicon.png" type="image/png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="css/style.css">
+<script src="data/data.js"></script><script src="js/art.js"></script><script src="js/app.js"></script>
+</head><body>
+<div id="site-header"></div>
+<main id="main"></main>
+<div id="site-footer"></div>
+<script>
+TS.chrome("");
+var it=TS.item(TS.param("id")||"mbb-stand-mixer"), E=TS.esc, m=document.getElementById("main");
+function ph(v){return v?E(v):'<span class="placeholder">[TBD]</span>';}
+if(!it){m.innerHTML='<div class="wrap" style="padding:60px 20px"><h1>Item not found</h1><p><a href="browse.html">Browse items</a></p></div>';}
+else{
+  var st=TS.store(it.store);
+  document.title=it.title+" · "+st.name+" · Townshelf (preview)";
+  var shots=(it.photoShots&&it.photoShots.length?it.photoShots:["Front","Back","Label / tag","Flaws","Scale"]).slice(0,6);
+  var hasPhotos=it.photos&&it.photos.length;
+  var photoNote=hasPhotos?'':'<span class="photo-note">Illustration · real store photos required at launch</span>';
+  var more=TS.itemsFor(st.slug).filter(function(x){return x.slug!==it.slug;}).slice(0,4);
+  var inc=(it.included||[]).map(function(x){return '<li>'+E(x)+'</li>';}).join("")||'<li>—</li>';
+  var mis=(it.missing&&it.missing!=="None")?'<li>'+E(it.missing)+'</li>':'<li style="list-style:none">Nothing missing</li>';
+  m.innerHTML=
+  '<div class="wrap"><div class="crumbs"><a href="browse.html">Shop</a> / <a href="browse.html?cat='+encodeURIComponent(it.category)+'">'+E(it.category)+'</a> / <a href="store.html?id='+st.slug+'">'+E(st.name)+'</a></div>'+
+  '<div class="item-layout">'+
+   '<div><div class="gallery-main" id="gmain">'+TS.itemPhoto(it,0)+photoNote+'<span class="shot-label" id="shotLabel">'+E(shots[0])+'</span></div>'+
+   '<div class="thumbs">'+shots.map(function(sh,i){return '<button class="'+(i?'':'on')+'" data-i="'+i+'" aria-label="Photo: '+E(sh)+'">'+TS.itemPhoto(it,i)+'<small>'+E(sh.split(" ")[0])+'</small></button>';}).join("")+'</div>'+
+   '<p class="muted small" style="margin-top:10px">Listing standard: 3–6 real photos: front, back, label/tag, any flaws, scale.</p></div>'+
+   '<div class="buy">'+
+    '<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">'+TS.condBadge(it.condition)+(it.checked?TS.checkedMark():'')+'</div>'+
+    (it.example?'<div style="margin-top:8px"><span class="tag">Example item, not real inventory or pricing</span></div>':'')+
+    '<h1 style="margin-top:.3em">'+E(it.title)+'</h1>'+
+    '<div class="price">'+TS.money(it.price)+' <small>sample price</small>'+(it.retailPrice?'<span class="retail">Retail '+TS.money(it.retailPrice)+'</span>':'<span class="retail">Original retail: <span class="placeholder">[if known]</span></span>')+'</div>'+
+    '<div class="cond-explain"><strong>'+E(it.condition)+':</strong> '+E(TS.COND_INFO[it.condition]||"")+'</div>'+
+    '<p>'+E(it.description)+'</p>'+
+    '<div class="lt-sec"><h3>What\'s included</h3><div class="incl"><ul class="yes">'+inc+'</ul><ul class="no">'+mis+'</ul></div></div>'+
+    '<a class="sold-by" href="store.html?id='+st.slug+'">'+TS.storeLogo(st,48)+'<div><small>Sold & shipped by</small><strong>'+E(st.name)+'</strong><small>'+E(st.town)+', '+E(st.state)+(st.verified?' · Verified storefront':'')+'</small></div></a>'+
+    '<button class="btn btn-primary" style="width:100%;font-size:1.05rem;padding:15px" id="add">Add to cart</button>'+
+    '<p class="muted small" style="text-align:center;margin:8px 0 18px">Preview only · no payment will be taken</p>'+
+    '<div class="lt-sec"><h3>Shipping & returns</h3><div class="ship-row">'+TS.postmark(st.town,st.state)+'<ul class="facts" style="flex:1">'+
+      '<li><span>Ships from</span><span><strong>'+E(st.town)+', '+E(st.state)+'</strong></span></li>'+
+      '<li><span>Ships by</span><span>'+(it.shipBy?E(it.shipBy):'<span class="placeholder">[ship-by window TBD]</span>')+'</span></li>'+
+      '<li><span>Shipping cost</span><span class="placeholder">[shipping price TBD]</span></li>'+
+      '<li><span>Returns</span><span>'+(it.returns?E(it.returns):'<span class="placeholder">[returns policy TBD]</span>')+'</span></li>'+
+    '</ul></div></div>'+
+    '<div class="lt-sec"><h3>Item details</h3><ul class="facts">'+
+      '<li><span>Brand</span><span>'+ph(it.brand)+'</span></li>'+
+      '<li><span>Category</span><span>'+E(it.category)+'</span></li>'+
+      '<li><span>Condition</span><span>'+E(it.condition)+'</span></li>'+
+      '<li><span>Dimensions</span><span>'+ph(it.dimensions)+'</span></li>'+
+      '<li><span>Weight</span><span>'+ph(it.weight)+'</span></li>'+
+    '</ul></div>'+
+    '<p class="support-note">Buying this supports '+E(st.name)+', a local shop in '+E(st.town)+', '+E(st.state)+'.</p>'+
+   '</div></div></div>'+
+  (more.length?'<section class="sec-cream"><div class="wrap"><div class="sec-head"><h2>More from '+E(st.name)+'</h2><a class="link-arrow" href="store.html?id='+st.slug+'">Visit shop →</a></div><div class="grid g4">'+more.map(TS.itemCard).join("")+'</div></div></section>':'');
+  document.querySelectorAll(".thumbs button").forEach(function(b){b.onclick=function(){
+    document.querySelectorAll(".thumbs button").forEach(function(x){x.classList.remove("on");});b.classList.add("on");
+    var i=+b.dataset.i, g=document.getElementById("gmain"); g.querySelector(".art").outerHTML=TS.itemPhoto(it,i);
+    document.getElementById("shotLabel").textContent=shots[i];};});
+  document.getElementById("add").onclick=function(){TS.cartAdd(it.slug);TS.openDrawer();};
+}
+</script>
+</body></html>

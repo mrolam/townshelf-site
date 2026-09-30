@@ -1,0 +1,2 @@
+slug,name,category,town,state,lat,lng,owner,ownerRole,tagline,story,quote,verified,checked,sample,featured,color,colorLight,icon,logo
+your-shop-slug,Your Shop Name,Vintage clothing & finds,Your Town,ST,40.0,-100.0,Owner Name,Owner,One-line tagline,2-3 sentence shop story.,Optional owner quote,true,true,false,true,#1C8A94,#D6ECEC,box,assets/logos/your-shop-slug.png
