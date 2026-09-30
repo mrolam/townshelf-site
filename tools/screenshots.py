@@ -55,6 +55,20 @@ async def main():
         await pin.hover(force=True); await pg.wait_for_timeout(500)
         await pg.locator("#map").screenshot(path=f"{OUT}/home-map-hover.png")
         await ctx.close()
+        # PWA install prompt on mobile (forced with ?pwa-demo=, nothing remembered)
+        IOS_UA = ("Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 "
+                  "(KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1")
+        for kind, fname, ua in [("ios", "pwa-prompt-mobile", IOS_UA), ("android", "pwa-prompt-android", None)]:
+            opts = {"viewport": {"width": 390, "height": 844}, "device_scale_factor": 2, "is_mobile": True,
+                    "has_touch": True, "reduced_motion": "reduce"}
+            if ua: opts["user_agent"] = ua
+            ctx = await b.new_context(**opts)
+            pg = await ctx.new_page()
+            pg.on("pageerror", lambda e: errs.append(("pwa", str(e))))
+            await pg.goto(BASE + "/index.html?pwa-demo=" + kind); await pg.wait_for_load_state("networkidle")
+            await pg.wait_for_selector(".pwa-prompt"); await pg.wait_for_timeout(300)
+            await pg.screenshot(path=f"{OUT}/{fname}.png")
+            await ctx.close()
         await b.close()
         print("ERRORS:", errs if errs else "none")
 asyncio.run(main())

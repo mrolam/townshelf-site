@@ -1,0 +1,20 @@
+{
+  "id": "/townshelf-site/",
+  "name": "Townshelf",
+  "short_name": "Townshelf",
+  "description": "Quality, vetted goods from real local shops in every corner of the country, shipped to your door. (Preview with sample data.)",
+  "start_url": "/townshelf-site/",
+  "scope": "/townshelf-site/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#FBF6EA",
+  "theme_color": "#1C8A94",
+  "lang": "en",
+  "categories": ["shopping"],
+  "icons": [
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "assets/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

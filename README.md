@@ -85,6 +85,14 @@ All motion is turned off when the visitor's system has `prefers-reduced-motion` 
 - "Recently checked" horizontal strip of newly checked items
 - Category chip row (on home it links to Browse; on Browse it filters the results)
 
+## Installable web app (PWA)
+
+- `manifest.webmanifest`: name/short name "Townshelf", `start_url` and `scope` set to `/townshelf-site/` (the GitHub Pages path), standalone display, cream background (`#FBF6EA`), teal theme (`#1C8A94`), icons at 192 and 512 plus maskable versions in `assets/icons/`.
+- `sw.js`: caches the site shell, sample data and default fonts so the site works offline. Pages are fetched from the network first and fall back to the cache offline; other files come from the cache and refresh in the background. The cache is versioned (`VERSION` at the top of `sw.js`). **Bump it whenever you change shell files.** When a new version is ready, the page shows a small "Refresh" bar.
+- `js/pwa.js`: registers the service worker and shows a small, dismissible "Add Townshelf to your home screen" card. It uses the browser install prompt on Android/desktop Chrome and Edge, and shows Share → Add to Home Screen steps on iOS Safari. It appears only once, never on first paint (it waits for a scroll or tap and some time on the page), and is never shown again once dismissed or installed. Force it for testing with `?pwa-demo=ios` or `?pwa-demo=android`.
+- Regenerate all icons from the source logo with `python3 tools/make_icons.py <logo.jpg>`.
+- If you host the site somewhere other than `/townshelf-site/`, update `id`, `start_url` and `scope` in the manifest.
+
 ## Screenshots
 
 ```bash
