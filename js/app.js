@@ -286,12 +286,12 @@ TS.videoTeaser = function(){
     '<div class="vid-teaser-ico">'+TS.videoIcon(30)+'</div>'+
     '<div class="vid-teaser-body">'+TS.soonPill()+
       '<h3>Shop by video</h3>'+
-      '<p>Video-chat the shop live during store hours and see the item like you\'re standing at the counter, before you buy.</p></div>'+
+      '<p>Video-chat participating shops live during their store hours and see the item like you\'re standing at the counter, before you buy.</p></div>'+
     '<a class="link-arrow vid-teaser-link" href="#join" data-join>Join to hear when it launches →</a>'+
   '</div>';
 };
 TS.videoLine = function(){
-  return '<div class="vid-line">'+TS.videoIcon(20)+'<p>'+TS.soonPill()+' <strong>Shop by video:</strong> video-chat the shop live during store hours and see this item like you\'re in the store. <a href="#join" data-join>Get notified</a></p></div>';
+  return '<div class="vid-line">'+TS.videoIcon(20)+'<p>'+TS.soonPill()+' <strong>Shop by video:</strong> at participating shops, video-chat the shop live during store hours and see this item like you\'re in the store. <a href="#join" data-join>Get notified</a></p></div>';
 };
 
 /* ---------- chrome ---------- */
