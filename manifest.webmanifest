@@ -1,10 +1,10 @@
 {
-  "id": "/townshelf-site/",
+  "id": "/",
   "name": "Townshelf",
   "short_name": "Townshelf",
   "description": "Quality, vetted goods from real local shops in every corner of the country, shipped to your door. (Preview with sample data.)",
-  "start_url": "/townshelf-site/",
-  "scope": "/townshelf-site/",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#FBF6EA",
