@@ -209,7 +209,7 @@ TS.joinInit = function(){
   function open(){lastFocus=document.activeElement;m.classList.add("open");m.setAttribute("aria-hidden","false");document.documentElement.classList.add("join-lock");setTimeout(function(){var f=form.querySelector('[name="Name"]');if(f&&!m.querySelector(".join-thanks:not([hidden])"))f.focus();},50);}
   function close(){m.classList.remove("open");m.setAttribute("aria-hidden","true");document.documentElement.classList.remove("join-lock");if(location.hash==="#join")history.replaceState(null,"",location.pathname+location.search);if(lastFocus&&lastFocus.focus)lastFocus.focus();}
   TS.openJoin=open; TS.closeJoin=close;
-  document.addEventListener("click",function(e){var t=e.target.closest&&e.target.closest("[data-join]");if(t){e.preventDefault();open();}var c=e.target.closest&&e.target.closest("[data-join-close]");if(c){e.preventDefault();close();}});
+  document.addEventListener("click",function(e){var t=e.target.closest&&e.target.closest("[data-join]");if(t){e.preventDefault();var role=t.getAttribute("data-join-role");if(role){var r=form.querySelector('input[name="I am a"][value="'+role+'"]');if(r){r.checked=true;owner.hidden=role!=="Shop owner";}}open();}var c=e.target.closest&&e.target.closest("[data-join-close]");if(c){e.preventDefault();close();}});
   document.addEventListener("keydown",function(e){if(e.key==="Escape"&&m.classList.contains("open"))close();});
   window.addEventListener("hashchange",function(){if(location.hash==="#join")open();});
   if(location.hash==="#join")open();
@@ -231,6 +231,67 @@ TS.joinInit = function(){
       .catch(function(){err.innerHTML='Sorry, that didn\'t go through. Please try again, or email <a href="mailto:Mitch@megabrownbox.com">Mitch@megabrownbox.com</a>.';err.hidden=false;})
       .then(function(){btn.disabled=false;btn.textContent="Send";});
   });
+};
+
+/* ---------- "New local shops loading…" strip on shop listings ---------- */
+TS.loadingStrips = function(){
+  var slots=document.querySelectorAll("[data-loading-strip]");
+  for(var i=0;i<slots.length;i++){
+    var el=slots[i]; if(el.firstChild) continue;
+    el.className="loading-strip"+(el.getAttribute("data-tone")==="white"?" loading-strip-white":"");
+    el.setAttribute("role","note");
+    el.innerHTML=TS.shopIcon()+
+      '<p class="ls-text"><strong>New local shops loading<span class="ls-ellipsis" aria-hidden="true"><i>.</i><i>.</i><i>.</i></span></strong> '+
+      '<span>We\'re signing independent shops around La Habra now.</span></p>'+
+      '<a class="ls-link" href="#join" data-join data-join-role="Shop owner">Own a shop? Join <span aria-hidden="true">→</span></a>';
+    // Play the little "opening up" animation once, when the strip scrolls into view.
+    // Without JS or with reduced motion the shop is simply shown open.
+    if(!TS.reduced() && "IntersectionObserver" in window){
+      el.classList.add("ls-armed");
+      (function(strip){
+        var io=new IntersectionObserver(function(ents){ents.forEach(function(en){if(en.isIntersecting){strip.classList.add("ls-play");io.disconnect();}});},{threshold:.6});
+        io.observe(strip);
+      })(el);
+    }
+  }
+};
+/* tiny storefront in the logo style: orange roof sign, teal roof, cream front, display window with a roll-up blind,
+   glass door with a CLOSED/OPEN sign */
+TS.shopIcon = function(){
+  return '<svg class="ls-icon" viewBox="0 0 44 44" width="52" height="52" aria-hidden="true">'+
+   '<defs><clipPath id="lsWin"><rect x="10" y="18" width="15" height="14" rx="1.5"/></clipPath></defs>'+
+   '<rect x="15" y="4" width="14" height="6" rx="1.2" fill="#EE7A2E"/>'+
+   '<rect x="5" y="10" width="34" height="5" rx="2" fill="#1C8A94"/>'+
+   '<rect x="7" y="15" width="30" height="24" fill="#FBF6EA" stroke="#1C8A94" stroke-width="1.6"/>'+
+   '<rect x="10" y="18" width="15" height="14" rx="1.5" fill="#1C8A94"/>'+
+   '<g clip-path="url(#lsWin)"><rect x="13" y="25" width="4" height="5" rx=".6" fill="#FBF6EA"/><rect x="18.5" y="23" width="4" height="7" rx=".6" fill="#EE7A2E"/>'+
+   '<g class="ls-blind"><rect x="10" y="18" width="15" height="14" fill="#E7E1D3"/><path d="M10 21.5h15M10 25h15M10 28.5h15" stroke="#CFC6B2" stroke-width=".8"/></g></g>'+
+   '<rect x="27.5" y="18" width="7" height="21" rx="1" fill="#D7ECEC" stroke="#1C8A94" stroke-width="1.4"/>'+
+   '<circle cx="29.3" cy="29" r=".8" fill="#2A2D34"/>'+
+   '<path d="M28.6 20.9l2.4-1.8 2.4 1.8" fill="none" stroke="#2A2D34" stroke-width=".5"/>'+
+   '<g class="ls-sign ls-closed"><rect x="26.5" y="20.8" width="9" height="4.6" rx=".7" fill="#2A2D34"/><text x="31" y="24" text-anchor="middle" font-size="2.7" font-weight="700" fill="#fff" font-family="DM Sans,sans-serif">CLOSED</text></g>'+
+   '<g class="ls-sign ls-open"><rect x="26.5" y="20.8" width="9" height="4.6" rx=".7" fill="#EE7A2E"/><text x="31" y="24.1" text-anchor="middle" font-size="3.2" font-weight="700" fill="#fff" font-family="DM Sans,sans-serif">OPEN</text></g>'+
+   '<rect x="4" y="38.5" width="36" height="2" rx="1" fill="#1C8A94"/>'+
+   '</svg>';
+};
+
+/* ---------- "Coming soon: Shop by video" teaser (no functionality yet) ---------- */
+TS.videoIcon = function(sz){
+  return '<svg class="vid-ico" viewBox="0 0 28 28" width="'+sz+'" height="'+sz+'" fill="none" stroke="#1C8A94" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+
+    '<rect x="3" y="8" width="15" height="12" rx="2.5"/><path d="M18 12.5l6-3.5v10l-6-3.5"/><circle cx="7.2" cy="11.8" r="1" fill="#EE7A2E" stroke="none"/></svg>';
+};
+TS.soonPill = function(){return '<span class="soon-pill">Coming soon</span>';};
+TS.videoTeaser = function(){
+  return '<div class="vid-teaser">'+
+    '<div class="vid-teaser-ico">'+TS.videoIcon(30)+'</div>'+
+    '<div class="vid-teaser-body">'+TS.soonPill()+
+      '<h3>Shop by video</h3>'+
+      '<p>Video-chat the shop live during store hours and see the item like you\'re standing at the counter, before you buy.</p></div>'+
+    '<a class="link-arrow vid-teaser-link" href="#join" data-join>Join to hear when it launches →</a>'+
+  '</div>';
+};
+TS.videoLine = function(){
+  return '<div class="vid-line">'+TS.videoIcon(20)+'<p>'+TS.soonPill()+' <strong>Shop by video:</strong> video-chat the shop live during store hours and see this item like you\'re in the store. <a href="#join" data-join>Get notified</a></p></div>';
 };
 
 /* ---------- chrome ---------- */
@@ -263,6 +324,8 @@ TS.chrome = function(active){
    '<div class="drawer-foot"><a class="btn btn-primary" href="cart.html">View cart & checkout</a><button class="btn btn-ghost" onclick="TS.closeDrawer()">Keep shopping</button></div></aside></div>';
   TS.updateCount();
   TS.joinInit();
+  TS.loadingStrips();
+  var vt=document.getElementById("videoTeaser"); if(vt&&!vt.firstChild) vt.innerHTML=TS.videoTeaser();
   if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',function(){setTimeout(TS.reveal,0);});}else{setTimeout(TS.reveal,0);}
 };
 })();

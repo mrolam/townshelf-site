@@ -95,6 +95,14 @@ Submissions are sent with [FormSubmit](https://formsubmit.co) (AJAX endpoint `ht
 
 Test without sending anything: `python3 tools/join_check.py` (FormSubmit is mocked).
 
+## "New local shops loading…" strip
+
+A small cream strip sits above the home page "Featured shops" grid and above both listing grids on Browse. It has a tiny storefront icon in the logo style, an animated ellipsis, and an "Own a shop? Join" link that opens the join form with **Shop owner** already selected. When the strip scrolls into view the storefront plays a one-time ~1.25 s "opening" animation (the window blind rolls up and the door sign flips from CLOSED to OPEN). With `prefers-reduced-motion` (or no JS) it is shown already open and nothing moves. Add a strip anywhere with `<div data-loading-strip></div>` (`data-tone="white"` on cream sections). Test: `python3 tools/loading_strip_check.py`.
+
+## "Coming soon: Shop by video" teaser
+
+A teaser card in the home page "How we vet" section and a small line on every item page announce the planned Shop by video feature (video-chat the shop live during store hours before buying). It is a teaser only, with no working video features; the links open the join form. Rendered by `TS.videoTeaser()` and `TS.videoLine()` in `js/app.js`. Test: `python3 tools/teaser_check.py`.
+
 ## Installable web app (PWA)
 
 - `manifest.webmanifest`: name/short name "Townshelf", `start_url` and `scope` set to `/townshelf-site/` (the GitHub Pages path), standalone display, cream background (`#FBF6EA`), teal theme (`#1C8A94`), icons at 192 and 512 plus maskable versions in `assets/icons/`.

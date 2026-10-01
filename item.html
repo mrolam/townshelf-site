@@ -40,6 +40,7 @@ else{
     '<a class="sold-by" href="store.html?id='+st.slug+'">'+TS.storeLogo(st,48)+'<div><small>Sold & shipped by</small><strong>'+E(st.name)+'</strong><small>'+E(st.town)+', '+E(st.state)+(st.verified?' · Verified storefront':'')+'</small></div></a>'+
     '<button class="btn btn-primary" style="width:100%;font-size:1.05rem;padding:15px" id="add">Add to cart</button>'+
     '<p class="muted small" style="text-align:center;margin:8px 0 18px">Preview only · no payment will be taken</p>'+
+    TS.videoLine()+
     '<div class="lt-sec"><h3>Shipping & returns</h3><div class="ship-row">'+TS.postmark(st.town,st.state)+'<ul class="facts" style="flex:1">'+
       '<li><span>Ships from</span><span><strong>'+E(st.town)+', '+E(st.state)+'</strong></span></li>'+
       '<li><span>Ships by</span><span>'+(it.shipBy?E(it.shipBy):'<span class="placeholder">[ship-by window TBD]</span>')+'</span></li>'+
