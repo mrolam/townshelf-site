@@ -168,6 +168,71 @@ TS.openDrawer = function(){
 };
 TS.closeDrawer = function(){document.getElementById("drawer").classList.remove("open");document.body.classList.remove("noscroll");};
 
+/* ---------- join form (FormSubmit, emails Mitch) ---------- */
+TS.JOIN_ENDPOINT = "https://formsubmit.co/ajax/Mitch@megabrownbox.com";
+TS.joinInit = function(){
+  if(document.getElementById("join")) return;
+  var m=document.createElement("div");
+  m.id="join"; m.className="join-modal"; m.setAttribute("aria-hidden","true");
+  m.innerHTML=
+   '<div class="join-scrim" data-join-close></div>'+
+   '<div class="join-panel" role="dialog" aria-modal="true" aria-labelledby="joinTitle">'+
+   '<button type="button" class="join-x" data-join-close aria-label="Close">×</button>'+
+   '<div class="join-form-wrap">'+
+   '<p class="eyebrow">Join Townshelf</p><h2 id="joinTitle">Be part of Townshelf</h2>'+
+   '<p class="join-lede">Leave your details and we\'ll reach out personally. Shop owners: tell us a little about your store.</p>'+
+   '<form id="joinForm" action="https://formsubmit.co/Mitch@megabrownbox.com" method="POST" novalidate>'+
+   '<input type="hidden" name="_subject" value="New Townshelf join request">'+
+   '<input type="hidden" name="_template" value="table">'+
+   '<input type="hidden" name="_captcha" value="false">'+
+   '<input type="hidden" name="Page" value="">'+
+   '<div class="join-hp" aria-hidden="true"><label>Leave this empty<input type="text" name="_honey" tabindex="-1" autocomplete="off"></label></div>'+
+   '<div class="join-row"><label>Name<input name="Name" required autocomplete="name"></label>'+
+   '<label>Email<input name="Email" type="email" required autocomplete="email"></label></div>'+
+   '<fieldset class="join-role"><legend>I am a</legend>'+
+   '<label class="join-chip"><input type="radio" name="I am a" value="Shopper" required><span>Shopper</span></label>'+
+   '<label class="join-chip"><input type="radio" name="I am a" value="Shop owner"><span>Shop owner</span></label></fieldset>'+
+   '<div class="join-owner" hidden>'+
+   '<div class="join-row"><label>Shop name <i>(optional)</i><input name="Shop name" autocomplete="organization"></label>'+
+   '<label>City, state <i>(optional)</i><input name="City/State" placeholder="e.g. La Habra, CA"></label></div>'+
+   '<div class="join-row"><label>Phone <i>(optional)</i><input name="Phone" type="tel" autocomplete="tel"></label>'+
+   '<label>Website or Instagram <i>(optional)</i><input name="Website/Instagram" placeholder="yourshop.com or @yourshop"></label></div></div>'+
+   '<label>Message <i>(optional)</i><textarea name="Message" rows="3"></textarea></label>'+
+   '<p class="join-err" role="alert" hidden></p>'+
+   '<button class="btn btn-primary join-submit" type="submit">Send</button>'+
+   '<p class="join-fine">Your details are sent to the Townshelf team by email.</p>'+
+   '</form></div>'+
+   '<div class="join-thanks" hidden tabindex="-1">'+TS.checkIcon(40)+'<h2>Thanks, you\'re on the list!</h2><p>We got your details and will be in touch soon.</p><button type="button" class="btn btn-ghost" data-join-close>Back to the site</button></div>'+
+   '</div>';
+  document.body.appendChild(m);
+  var form=m.querySelector("#joinForm"), owner=m.querySelector(".join-owner"), err=m.querySelector(".join-err"), lastFocus=null;
+  function open(){lastFocus=document.activeElement;m.classList.add("open");m.setAttribute("aria-hidden","false");document.documentElement.classList.add("join-lock");setTimeout(function(){var f=form.querySelector('[name="Name"]');if(f&&!m.querySelector(".join-thanks:not([hidden])"))f.focus();},50);}
+  function close(){m.classList.remove("open");m.setAttribute("aria-hidden","true");document.documentElement.classList.remove("join-lock");if(location.hash==="#join")history.replaceState(null,"",location.pathname+location.search);if(lastFocus&&lastFocus.focus)lastFocus.focus();}
+  TS.openJoin=open; TS.closeJoin=close;
+  document.addEventListener("click",function(e){var t=e.target.closest&&e.target.closest("[data-join]");if(t){e.preventDefault();open();}var c=e.target.closest&&e.target.closest("[data-join-close]");if(c){e.preventDefault();close();}});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&m.classList.contains("open"))close();});
+  window.addEventListener("hashchange",function(){if(location.hash==="#join")open();});
+  if(location.hash==="#join")open();
+  form.addEventListener("change",function(e){if(e.target.name==="I am a"){owner.hidden=e.target.value!=="Shop owner";}});
+  form.addEventListener("submit",function(e){
+    e.preventDefault(); err.hidden=true;
+    if(!form.checkValidity()){var bad=form.querySelector(":invalid");err.textContent=bad&&bad.type==="email"&&bad.value?"Please enter a valid email address.":"Please fill in your name, email and whether you're a shopper or shop owner.";err.hidden=false;if(bad)bad.focus();return;}
+    form.querySelector('[name="Page"]').value=location.href.split("#")[0];
+    var data={}; new FormData(form).forEach(function(v,k){data[k]=v;});
+    if(data["I am a"]!=="Shop owner"){["Shop name","City/State","Phone","Website/Instagram"].forEach(function(k){delete data[k];});}
+    function done(){m.querySelector(".join-form-wrap").hidden=true;var th=m.querySelector(".join-thanks");th.hidden=false;th.focus();form.reset();owner.hidden=true;}
+    if(data._honey){done();return;}   // bot filled the honeypot: pretend success, send nothing
+    var btn=form.querySelector(".join-submit"); btn.disabled=true; btn.textContent="Sending…";
+    fetch(TS.JOIN_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(data)})
+      .then(function(r){return r.json().catch(function(){return {};}).then(function(j){return {ok:r.ok,j:j};});})
+      .then(function(res){var j=res.j||{};
+        if(res.ok && (String(j.success)==="true" || /activat/i.test(j.message||""))) done();
+        else throw new Error(j.message||"send failed");})
+      .catch(function(){err.innerHTML='Sorry, that didn\'t go through. Please try again, or email <a href="mailto:Mitch@megabrownbox.com">Mitch@megabrownbox.com</a>.';err.hidden=false;})
+      .then(function(){btn.disabled=false;btn.textContent="Send";});
+  });
+};
+
 /* ---------- chrome ---------- */
 function nav(active){
   var L=[["browse.html","Shop"],["browse.html#towns","Shop by town"],["about.html","How it works"],["list-your-shop.html","List your shop"]];
@@ -176,7 +241,8 @@ function nav(active){
 TS.chrome = function(active){
   var h=document.getElementById("site-header");
   if(h) h.innerHTML =
-   '<div class="preview-banner">Preview with sample stores and items · No real payments or signups</div>'+
+   '<div class="joinbar"><div class="wrap joinbar-in"><span class="joinbar-txt">Shoppers and local shop owners: be first in when Townshelf opens.</span><a class="joinbar-btn" href="#join" data-join>Click here to join</a></div></div>'+
+   '<div class="preview-banner">Preview with sample stores and items · No real payments</div>'+
    '<header class="topbar"><div class="wrap topbar-in">'+
    '<a class="brand" href="index.html"><img src="assets/logo-icon.png?v=2" alt="" width="55" height="44"><span>townshelf</span></a>'+
    '<nav class="mainnav" id="mainnav">'+nav(active)+'</nav>'+
@@ -189,13 +255,14 @@ TS.chrome = function(active){
    '<footer class="footer"><div class="wrap footer-grid">'+
    '<div><a class="brand brand-foot" href="index.html"><img src="assets/logo-icon.png?v=2" alt="" width="55" height="44"><span>townshelf</span></a><p>Quality, vetted goods from real local shops in every corner of the country, shipped to your door. Every order keeps a local shop open.</p></div>'+
    '<div><h4>Shop</h4><a href="browse.html">All items</a><a href="browse.html#towns">Shop by town</a><a href="store.html?id=mega-brown-box">Mega Brown Box</a></div>'+
-   '<div><h4>Townshelf</h4><a href="about.html">How it works</a><a href="about.html#faq">FAQ</a><a href="list-your-shop.html">List your shop</a><a href="cart.html">Cart (preview)</a></div>'+
+   '<div><h4>Townshelf</h4><a href="about.html">How it works</a><a href="about.html#faq">FAQ</a><a href="list-your-shop.html">List your shop</a><a href="#join" data-join>Join Townshelf</a><a href="cart.html">Cart (preview)</a></div>'+
    '</div><div class="wrap footer-note">Preview prototype with sample stores and items. Apart from Mega Brown Box (La Habra, CA), shops, owners and quotes are fictional; Mega Brown Box items shown are generic examples. Prices are sample figures. No payments are processed.<br>Townshelf is not affiliated with American Express.</div></footer>'+
    '<div class="drawer" id="drawer" aria-hidden="true"><div class="drawer-scrim" onclick="TS.closeDrawer()"></div><aside class="drawer-panel" role="dialog" aria-label="Cart">'+
    '<div class="drawer-head"><strong>Added to your cart</strong><button onclick="TS.closeDrawer()" aria-label="Close">✕</button></div>'+
    '<div class="preview-pill">Preview only, no payment</div><div class="drawer-body"></div>'+
    '<div class="drawer-foot"><a class="btn btn-primary" href="cart.html">View cart & checkout</a><button class="btn btn-ghost" onclick="TS.closeDrawer()">Keep shopping</button></div></aside></div>';
   TS.updateCount();
+  TS.joinInit();
   if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',function(){setTimeout(TS.reveal,0);});}else{setTimeout(TS.reveal,0);}
 };
 })();

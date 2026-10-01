@@ -85,6 +85,16 @@ All motion is turned off when the visitor's system has `prefers-reduced-motion` 
 - "Recently checked" horizontal strip of newly checked items
 - Category chip row (on home it links to Browse; on Browse it filters the results)
 
+## Join form ("Click here to join")
+
+A teal bar at the very top of every page has an orange **Click here to join** button (there's also a "Join Townshelf" link in the footer, and any link to `#join` opens it). It opens a short form: name, email, I am a (Shopper / Shop owner), optional shop name, city/state, phone and website/Instagram for shop owners, and an optional message.
+
+Submissions are sent with [FormSubmit](https://formsubmit.co) (AJAX endpoint `https://formsubmit.co/ajax/Mitch@megabrownbox.com`, set in `TS.JOIN_ENDPOINT` in `js/app.js`) with the subject "New Townshelf join request", the table template, and a `_honey` honeypot field. A thank-you message is shown in place after sending.
+
+**Activation:** the very first submission makes FormSubmit send a one-time "Activate Form" email to Mitch@megabrownbox.com. Click it once; after that every submission is emailed. The service worker never handles POSTs or other sites' requests, so it doesn't touch submissions.
+
+Test without sending anything: `python3 tools/join_check.py` (FormSubmit is mocked).
+
 ## Installable web app (PWA)
 
 - `manifest.webmanifest`: name/short name "Townshelf", `start_url` and `scope` set to `/townshelf-site/` (the GitHub Pages path), standalone display, cream background (`#FBF6EA`), teal theme (`#1C8A94`), icons at 192 and 512 plus maskable versions in `assets/icons/`.

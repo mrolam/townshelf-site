@@ -1,6 +1,6 @@
 /* Townshelf service worker: caches the site shell + sample data for offline use.
    Bump VERSION whenever shell files change; old caches are removed on activate. */
-const VERSION = "townshelf-v1";
+const VERSION = "townshelf-v2";
 const SHELL = [
   "./", "index.html", "browse.html", "store.html", "item.html", "cart.html", "list-your-shop.html", "about.html",
   "css/style.css", "js/app.js", "js/art.js", "js/pwa.js", "data/data.js",
