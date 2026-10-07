@@ -62,8 +62,8 @@ TS.itemCard = function(it){
     '<div class="item-img">'+TS.itemPhoto(it,0)+'</div>'+
     '<div class="item-body"><div class="item-meta">'+TS.condBadge(it.condition)+(it.example?'<span class="tag">Example item</span>':'')+'</div>'+
     '<h3>'+esc(it.title)+'</h3>'+
-    '<div class="item-store">'+esc(st.name)+'</div>'+TS.shipsFrom(st)+
-    '<div class="item-price">'+TS.money(it.price)+' <small>sample price</small></div>'+(it.checked?TS.checkedMark({small:true}):'')+'</div></a>';
+    '<div class="item-store"><span role="link" tabindex="0" class="store-link" style="text-decoration:underline;cursor:pointer" onclick="event.preventDefault();event.stopPropagation();location.href=\'store.html?id='+encodeURIComponent(it.store)+'\'">'+esc(st.name)+'</span></div>'+TS.shipsFrom(st)+
+    '<div class="item-price">'+TS.money(it.price)+(it.real?'':' <small>sample price</small>')+'</div>'+(it.checked?TS.checkedMark({small:true}):'')+'</div></a>';
 };
 TS.storeCard = function(st){
   var n=TS.itemsFor(st.slug).length;
