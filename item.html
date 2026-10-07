@@ -33,13 +33,15 @@ else{
     '<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">'+TS.condBadge(it.condition)+(it.checked?TS.checkedMark():'')+'</div>'+
     (it.example?'<div style="margin-top:8px"><span class="tag">Example item, not real inventory or pricing</span></div>':'')+
     '<h1 style="margin-top:.3em">'+E(it.title)+'</h1>'+
-    '<div class="price">'+TS.money(it.price)+' <small>sample price</small>'+(it.retailPrice?'<span class="retail">Retail '+TS.money(it.retailPrice)+'</span>':'<span class="retail">Original retail: <span class="placeholder">[if known]</span></span>')+'</div>'+
+    '<div class="price">'+TS.money(it.price)+(it.real?'':' <small>sample price</small>')+(it.retailPrice?'<span class="retail">Retail '+TS.money(it.retailPrice)+'</span>':'<span class="retail">Original retail: <span class="placeholder">[if known]</span></span>')+'</div>'+
     '<div class="cond-explain"><strong>'+E(it.condition)+':</strong> '+E(TS.COND_INFO[it.condition]||"")+'</div>'+
     '<p>'+E(it.description)+'</p>'+
     '<div class="lt-sec"><h3>What\'s included</h3><div class="incl"><ul class="yes">'+inc+'</ul><ul class="no">'+mis+'</ul></div></div>'+
     '<a class="sold-by" href="store.html?id='+st.slug+'">'+TS.storeLogo(st,48)+'<div><small>Sold & shipped by</small><strong>'+E(st.name)+'</strong><small>'+E(st.town)+', '+E(st.state)+(st.verified?' · Verified storefront':'')+'</small></div></a>'+
+    (it.buyUrl?'<a class="btn btn-primary" style="width:100%;font-size:1.05rem;padding:15px;display:block;text-align:center" href="'+E(it.buyUrl)+'" target="_blank" rel="noopener">Buy on megabrownbox.com</a>'+
+    '<p class="muted small" style="text-align:center;margin:8px 0 18px">Secure checkout on the Mega Brown Box store</p>':
     '<button class="btn btn-primary" style="width:100%;font-size:1.05rem;padding:15px" id="add">Add to cart</button>'+
-    '<p class="muted small" style="text-align:center;margin:8px 0 18px">Preview only · no payment will be taken</p>'+
+    '<p class="muted small" style="text-align:center;margin:8px 0 18px">Preview only · no payment will be taken</p>')+
     TS.videoLine()+
     '<div class="lt-sec"><h3>Shipping & returns</h3><div class="ship-row">'+TS.postmark(st.town,st.state)+'<ul class="facts" style="flex:1">'+
       '<li><span>Ships from</span><span><strong>'+E(st.town)+', '+E(st.state)+'</strong></span></li>'+
@@ -61,7 +63,7 @@ else{
     document.querySelectorAll(".thumbs button").forEach(function(x){x.classList.remove("on");});b.classList.add("on");
     var i=+b.dataset.i, g=document.getElementById("gmain"); g.querySelector(".art").outerHTML=TS.itemPhoto(it,i);
     document.getElementById("shotLabel").textContent=shots[i];};});
-  document.getElementById("add").onclick=function(){TS.cartAdd(it.slug);TS.openDrawer();};
+  if(document.getElementById("add"))document.getElementById("add").onclick=function(){TS.cartAdd(it.slug);TS.openDrawer();};
 }
 </script>
 </body></html>
