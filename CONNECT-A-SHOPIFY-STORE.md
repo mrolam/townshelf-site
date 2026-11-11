@@ -1,5 +1,11 @@
 # Connecting a Shopify store to TownShelf (preview, Nov 11 2026)
 
+> **Update (channel-connect branch):** the one-click flow is now built as a separate Shopify **sales channel** app,
+> repo `mrolam/townshelf-channel` (not part of TownShelf Live). Scopes are `read_product_listings` (+ ResourceFeedback),
+> not `read_products`/`read_inventory`: merchants pick items by publishing them to the TownShelf channel.
+> Site side: `data/config.js` (`channelApp`), `js/catalog-api.js`, and the Connect Shopify form on `list-your-shop.html`.
+> Deploy + review steps: `townshelf-channel/docs/DEPLOY-AND-SUBMIT.md`.
+
 Pilot: Mega Brown Box (megabrownbox.com, La Habra, CA).
 
 ## What works today (concierge import, this branch)

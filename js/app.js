@@ -58,7 +58,7 @@ TS.verifiedBadge = function(){return '<span class="verified">Verified storefront
 
 TS.itemCard = function(it){
   var st=TS.store(it.store)||{name:"?",town:"",state:""};
-  return '<a class="item-card" href="item.html?id='+encodeURIComponent(it.slug)+'">'+
+  return '<a class="item-card" href="item.html?id='+encodeURIComponent(it.slug)+'&store='+encodeURIComponent(it.store)+'">'+
     '<div class="item-img">'+TS.itemPhoto(it,0)+'</div>'+
     '<div class="item-body"><div class="item-meta">'+TS.condBadge(it.condition)+(it.example?'<span class="tag">Example item</span>':'')+'</div>'+
     '<h3>'+esc(it.title)+'</h3>'+
